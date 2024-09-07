@@ -1,21 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TechLancers</title>
-    <!-- Link to Google Font for better typography -->
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        /* Basic reset */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
-        /* Body Styling */
         body {
             font-family: 'Roboto', sans-serif;
             background-color: #f0f0f0;
@@ -27,34 +23,124 @@
             min-height: 100vh;
         }
 
-        /* Header Styling */
         header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
             background-color: #1a1a1a;
             width: 100%;
-            padding: 20px 0;
-            text-align: center;
-            color: #fff;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 10;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo img {
+            width: 80px;
+            margin-right: 15px;
+        }
+
+        .logo h1 {
+            color: white;
+            font-size: 1.8rem;
+        }
+
+        .chatbot {
+            color: white;
+            background-color: #007bff;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .search-container {
+            display: none;
+            margin: 80px auto 20px;
+            width: 60%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             position: relative;
         }
 
-        /* Website Title Styling */
-        header h1 {
-            font-size: 2.5rem;
-            letter-spacing: 2px;
+        .search-container input {
+            width: 80%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 1rem;
         }
 
-        /* Logo Styling */
-        header img {
-            position: absolute;
-            left: 20px;
-            top: 20px;
-            width: 100px;
-            height: auto;
+        .suggestion-buttons {
+            display: none;
+            width: 80%;
+            margin: 20px auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
         }
 
-        /* Button Styling */
+        .suggestion-buttons button {
+            padding: 15px;
+            font-size: 1rem;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .suggestion-buttons button:hover {
+            background-color: #0056b3;
+        }
+
+        .usp-container {
+            width: 80%;
+            margin: 50px auto;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .usp-box {
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            width: 23%; /* Adjust width to fit four boxes in a line */
+        }
+
+        .usp-box h3 {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+        }
+
+        .usp-box p {
+            display: none;
+            color: white;
+        }
+
+        .usp-box:hover {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .usp-box:hover p {
+            display: block;
+        }
+
         .btn-container {
+            display: none;
             margin-top: 30px;
+            text-align: center;
         }
 
         .btn {
@@ -74,7 +160,6 @@
             background-color: #0056b3;
         }
 
-        /* Form Container */
         .form-container {
             display: none;
             background-color: #fff;
@@ -83,9 +168,9 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             margin-top: 40px;
             max-width: 400px;
+            text-align: center;
         }
 
-        /* Form Styling */
         .form-container input {
             width: 100%;
             padding: 10px;
@@ -99,19 +184,6 @@
             margin-top: 10px;
         }
 
-        /* Role Selection Container */
-        .role-selection {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .role-selection h2 {
-            margin-bottom: 20px;
-            font-size: 1.5rem;
-        }
-
-        /* Footer Styling */
         footer {
             margin-top: auto;
             background-color: #1a1a1a;
@@ -123,12 +195,14 @@
         }
     </style>
 </head>
-
 <body>
     <!-- Header Section -->
     <header>
-        <img src="https://example.com/logo.png" alt="TechLancers Logo">
-        <h1>TechLancers</h1>
+        <div class="logo">
+            <img src="https://example.com/logo.png" alt="TechLancers Logo">
+            <h1>TechLancers</h1>
+        </div>
+        <div class="chatbot">Chat Bot</div>
     </header>
 
     <!-- Role Selection -->
@@ -139,7 +213,7 @@
     </div>
 
     <!-- Button Container -->
-    <div id="actionSelection" class="btn-container" style="display: none;">
+    <div id="actionSelection" class="btn-container">
         <button class="btn" onclick="showLoginForm()">Login</button>
         <button class="btn" onclick="showSignupForm()">Sign Up</button>
     </div>
@@ -174,69 +248,110 @@
         <button class="btn" onclick="signup()">Submit</button>
     </div>
 
+    <!-- Search Bar -->
+    <div id="searchBar" class="search-container">
+        <input type="text" placeholder="Search by roles (e.g., frontend developer, backend developer)">
+        <div class="chatbot">Chat Bot</div>
+    </div>
+
+    <!-- Suggestion Buttons -->
+    <div id="suggestionButtons" class="suggestion-buttons">
+        <button>Content Writer</button>
+        <button>Graphic Design</button>
+        <button>Frontend Developer</button>
+        <button>Animation</button>
+        <button>Backend Developer</button>
+        <button>Data Analyst</button>
+        <button>Research Analyst</button>
+        <button>App Development</button>
+        <button>Tax Assistant</button>
+    </div>
+
+    <!-- USP Boxes -->
+    <div class="usp-container">
+        <div class="usp-box">
+            <h3>Transparent Pricing</h3>
+            <p>60% advance payment ensures secure transactions.</p>
+        </div>
+        <div class="usp-box">
+            <h3>Quality Work</h3>
+            <p>Handpicked freelancers delivering top-notch quality.</p>
+        </div>
+        <div class="usp-box">
+            <h3>Timely Delivery</h3>
+            <p>Projects completed on or before the deadline.</p>
+        </div>
+        <div class="usp-box">
+            <h3>Dedicated Teams</h3>
+            <p>Work with teams that adapt to your specific needs.</p>
+        </div>
+    </div>
+
     <!-- Footer Section -->
     <footer>
-        <p>&copy; 2024 TechLancers. All Rights Reserved.</p>
+        <p>© 2024 TechLancers. All rights reserved.</p>
     </footer>
 
     <script>
         let userRole = '';
 
-        // Function to select role and show login/signup options
         function selectRole(role) {
             userRole = role;
             document.getElementById('roleSelection').style.display = 'none';
             document.getElementById('actionSelection').style.display = 'block';
-            alert(`You selected: ${role.charAt(0).toUpperCase() + role.slice(1)}`);
         }
 
-        // JavaScript to toggle between login and signup forms
         function showLoginForm() {
-            document.getElementById("signupForm").style.display = "none";
-            document.getElementById("loginForm").style.display = "block";
+            document.get
+            function showLoginForm() {
+            document.getElementById('loginForm').style.display = 'block';
+            document.getElementById('signupForm').style.display = 'none';
         }
 
         function showSignupForm() {
-            document.getElementById("loginForm").style.display = "none";
-            document.getElementById("signupForm").style.display = "block";
+            document.getElementById('signupForm').style.display = 'block';
+            document.getElementById('loginForm').style.display = 'none';
         }
 
-        // JavaScript to handle login
+        function showSearchBar() {
+            document.getElementById('searchBar').style.display = 'flex';
+            document.getElementById('suggestionButtons').style.display = 'grid';
+        }
+
         function login() {
             const loginAadhar = document.getElementById("loginAadhar").value;
             const loginPassword = document.getElementById("loginPassword").value;
 
-            // Check if Aadhar and password match with the signed-up data (for demonstration, using localStorage)
             const storedAadhar = localStorage.getItem(`${userRole}_aadhar`);
             const storedPassword = localStorage.getItem(`${userRole}_password`);
 
             if (loginAadhar === storedAadhar && loginPassword === storedPassword) {
-                alert("Login successful!");
+                showSearchBar();
+                document.getElementById('loginForm').style.display = 'none';
+                document.getElementById('signupForm').style.display = 'none';
+                document.getElementById('actionSelection').style.display = 'none';
+                document.getElementById('roleSelection').style.display = 'none';
             } else {
                 alert("Invalid Aadhar Card or Password!");
             }
         }
 
-        // JavaScript to handle signup
         function signup() {
             const name = document.getElementById("name").value;
             const mobile = document.getElementById("mobile").value;
             const aadhar = document.getElementById("aadhar").value;
             const password = document.getElementById("password").value;
 
-            // Simple validation (You can add more advanced validation)
             if (name && mobile && aadhar && password) {
-                // Store the Aadhar card and password for future login (for demonstration, using localStorage)
                 localStorage.setItem(`${userRole}_aadhar`, aadhar);
                 localStorage.setItem(`${userRole}_password`, password);
 
                 alert("Signup successful! Please login.");
-                showLoginForm(); // Switch to login form after successful signup
+                showLoginForm();
             } else {
                 alert("Please fill out all fields!");
             }
         }
     </script>
 </body>
-
 </html>
