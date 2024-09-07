@@ -1,9 +1,11 @@
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TechLancers</title>
+    <title>TechLancers Dashboard</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <style>
         * {
@@ -14,13 +16,14 @@
 
         body {
             font-family: 'Roboto', sans-serif;
-            background-color: #f0f0f0;
+            background: linear-gradient(to bottom, #b3e0ff, #ffffff 50%, #e6ffe6);
             color: #333;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             min-height: 100vh;
+            padding-top: 80px; /* Space for fixed header */
         }
 
         header {
@@ -51,6 +54,12 @@
             font-size: 1.8rem;
         }
 
+        .profile-container {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
         .chatbot {
             color: white;
             background-color: #007bff;
@@ -59,14 +68,63 @@
             cursor: pointer;
         }
 
-        .search-container {
-            display: none;
-            margin: 80px auto 20px;
-            width: 60%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        .profile {
+            background-color: #fff;
+            color: #333;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
             position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .profile img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .profile-dropdown {
+            display: none;
+            position: absolute;
+            top: 60px;
+            right: 0;
+            background-color: #f9f9f9;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+            width: 600px;
+            padding: 20px;
+            display: flex;
+            gap: 20px;
+        }
+
+        .profile-dropdown .info-section,
+        .profile-dropdown .project-section {
+            width: 50%;
+        }
+
+        .profile-dropdown h4 {
+            margin: 10px 0;
+            font-size: 1.2rem;
+            color: #007bff;
+        }
+
+        .profile-dropdown p {
+            margin: 10px 0;
+        }
+
+        .profile:hover .profile-dropdown {
+            display: flex;
+        }
+
+        .search-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 80px auto 20px; /* Increased spacing below search bar */
+            width: 60%;
         }
 
         .search-container input {
@@ -78,12 +136,12 @@
         }
 
         .suggestion-buttons {
-            display: none;
-            width: 80%;
-            margin: 20px auto;
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 20px;
+            width: 60%;
+            margin-bottom: 20px; /* Space between suggestion buttons and USP boxes */
+            justify-content: center;
         }
 
         .suggestion-buttons button {
@@ -103,9 +161,11 @@
 
         .usp-container {
             width: 80%;
-            margin: 50px auto;
             display: flex;
             justify-content: space-between;
+            margin-bottom: 40px; /* Space below USP boxes */
+            position: absolute;
+            bottom: 20px;
         }
 
         .usp-box {
@@ -115,7 +175,7 @@
             padding: 20px;
             text-align: center;
             transition: all 0.3s ease;
-            width: 23%; /* Adjust width to fit four boxes in a line */
+            width: 23%;
         }
 
         .usp-box h3 {
@@ -137,64 +197,71 @@
             display: block;
         }
 
-        .btn-container {
+        .project-form {
             display: none;
-            margin-top: 30px;
-            text-align: center;
-        }
-
-        .btn {
-            background-color: #007bff;
-            color: white;
-            padding: 15px 30px;
-            border: none;
-            border-radius: 5px;
-            margin: 10px;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            text-decoration: none;
-        }
-
-        .btn:hover {
-            background-color: #0056b3;
-        }
-
-        .form-container {
-            display: none;
+            position: fixed;
+            top: 20%;
+            left: 50%;
+            transform: translateX(-50%);
             background-color: #fff;
             padding: 30px;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            margin-top: 40px;
-            max-width: 400px;
-            text-align: center;
+            width: 60%;
+            max-width: 600px;
+            z-index: 20;
+            transition: opacity 0.3s ease;
+            opacity: 0;
         }
 
-        .form-container input {
+        .project-form.active {
+            display: block;
+            opacity: 1;
+        }
+
+        .project-form h2 {
+            margin-bottom: 20px;
+            color: #007bff;
+            font-size: 1.5rem;
+        }
+
+        .project-form label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .project-form input,
+        .project-form textarea {
             width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #ccc;
+            padding: 15px;
             border-radius: 5px;
+            border: 1px solid #ddd;
+            margin-bottom: 20px;
+            font-size: 1rem;
         }
 
-        .form-container label {
-            font-weight: bold;
-            margin-top: 10px;
+        .project-form textarea {
+            resize: vertical;
         }
 
-        footer {
-            margin-top: auto;
-            background-color: #1a1a1a;
-            width: 100%;
-            padding: 10px 0;
-            text-align: center;
-            color: #ccc;
-            font-size: 0.9rem;
+        .project-form button {
+            padding: 15px 25px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            font-size: 1rem;
+        }
+
+        .project-form button:hover {
+            background-color: #0056b3;
         }
     </style>
 </head>
+
 <body>
     <!-- Header Section -->
     <header>
@@ -202,156 +269,120 @@
             <img src="https://example.com/logo.png" alt="TechLancers Logo">
             <h1>TechLancers</h1>
         </div>
-        <div class="chatbot">Chat Bot</div>
+        <div class="profile-container">
+            <div class="profile" onclick="toggleProfileDropdown()">
+                <img src="https://example.com/profile-pic.jpg" alt="Profile Picture">
+                Employer Profile
+                <div class="profile-dropdown" id="profileDropdown">
+                    <div class="info-section">
+                        <h4>Profile Information</h4>
+                        <p><strong>Name:</strong> John Doe</p>
+                        <p><strong>Email:</strong> john@example.com</p>
+                        <p><strong>Number of Projects Uploaded:</strong> 5</p>
+                    </div>
+                    <div class="project-section">
+                        <h4>Project Status</h4>
+                        <p><strong>Project 1:</strong> 60% completed - Freelancer accepted</p>
+                        <p><strong>Project 2:</strong> 30% completed - Awaiting freelancer</p>
+                        <p><strong>Project 3:</strong> 80% completed - Freelancer working</p>
+                        <p><strong>Project 4:</strong> 20% completed - Not yet started</p>
+                        <p><strong>Project 5:</strong> 50% completed - Freelancer working</p>
+                    </div>
+                </div>
+            </div>
+            <div class="chatbot">Chat Bot</div>
+        </div>
     </header>
-
-    <!-- Role Selection -->
-    <div id="roleSelection" class="role-selection">
-        <h2>Are you a Freelancer or an Employer?</h2>
-        <button class="btn" onclick="selectRole('freelancer')">Freelancer</button>
-        <button class="btn" onclick="selectRole('employer')">Employer</button>
-    </div>
-
-    <!-- Button Container -->
-    <div id="actionSelection" class="btn-container">
-        <button class="btn" onclick="showLoginForm()">Login</button>
-        <button class="btn" onclick="showSignupForm()">Sign Up</button>
-    </div>
-
-    <!-- Login Form -->
-    <div id="loginForm" class="form-container">
-        <h2>Login</h2>
-        <label for="loginAadhar">Aadhar Card Number:</label>
-        <input type="text" id="loginAadhar" placeholder="Enter Aadhar Card Number">
-
-        <label for="loginPassword">Password:</label>
-        <input type="password" id="loginPassword" placeholder="Enter Password">
-
-        <button class="btn" onclick="login()">Submit</button>
-    </div>
-
-    <!-- Signup Form -->
-    <div id="signupForm" class="form-container">
-        <h2>Sign Up</h2>
-        <label for="name">Name:</label>
-        <input type="text" id="name" placeholder="Enter Name">
-
-        <label for="mobile">Mobile Number:</label>
-        <input type="text" id="mobile" placeholder="Enter Mobile Number">
-
-        <label for="aadhar">Aadhar Card Number:</label>
-        <input type="text" id="aadhar" placeholder="Enter Aadhar Card Number">
-
-        <label for="password">Password:</label>
-        <input type="password" id="password" placeholder="Enter Password">
-
-        <button class="btn" onclick="signup()">Submit</button>
-    </div>
 
     <!-- Search Bar -->
     <div id="searchBar" class="search-container">
-        <input type="text" placeholder="Search by roles (e.g., frontend developer, backend developer)">
-        <div class="chatbot">Chat Bot</div>
+        <input type="text" id="searchInput" placeholder="Search by roles (e.g., frontend developer, backend developer)">
     </div>
 
     <!-- Suggestion Buttons -->
     <div id="suggestionButtons" class="suggestion-buttons">
-        <button>Content Writer</button>
-        <button>Graphic Design</button>
-        <button>Frontend Developer</button>
-        <button>Animation</button>
-        <button>Backend Developer</button>
-        <button>Data Analyst</button>
-        <button>Research Analyst</button>
-        <button>App Development</button>
-        <button>Tax Assistant</button>
+        <button onclick="openProjectForm('Content Writer')">Content Writer</button>
+        <button onclick="openProjectForm('Graphic Design')">Graphic Design</button>
+        <button onclick="openProjectForm('Frontend Developer')">Frontend Developer</button>
+        <button onclick="openProjectForm('Animation')">Animation</button>
+        <button onclick="openProjectForm('Backend Developer')">Backend Developer</button>
+        <button onclick="openProjectForm('Research Analyst')">Research Analyst</button>
+        <button onclick="openProjectForm('App Development')">App Development</button>
+        <button onclick="openProjectForm('Tax Assistant')">Tax Assistant</button>
     </div>
 
     <!-- USP Boxes -->
     <div class="usp-container">
         <div class="usp-box">
             <h3>Transparent Pricing</h3>
-            <p>60% advance payment ensures secure transactions.</p>
+            <p>60% advance payment</p>
         </div>
         <div class="usp-box">
-            <h3>Quality Work</h3>
-            <p>Handpicked freelancers delivering top-notch quality.</p>
+            <h3>Expert Freelancers</h3>
+            <p>Top-rated professionals</p>
         </div>
         <div class="usp-box">
-            <h3>Timely Delivery</h3>
-            <p>Projects completed on or before the deadline.</p>
+            <h3>Secure Payments</h3>
+            <p>Safe and reliable transactions</p>
         </div>
         <div class="usp-box">
-            <h3>Dedicated Teams</h3>
-            <p>Work with teams that adapt to your specific needs.</p>
+            <h3>24/7 Support</h3>
+            <p>Round-the-clock assistance</p>
         </div>
     </div>
 
-    <!-- Footer Section -->
-    <footer>
-        <p>© 2024 TechLancers. All rights reserved.</p>
-    </footer>
+    <!-- Project Form -->
+    <div id="projectForm" class="project-form">
+        <h2>Project Description</h2>
+        <form>
+            <label for="projectTitle">Project Title</label>
+            <input type="text" id="projectTitle" name="projectTitle">
+
+            <label for="projectDescription">Project Description</label>
+            <textarea id="projectDescription" name="projectDescription" rows="4"></textarea>
+
+            <label for="projectBudget">Budget</label>
+            <input type="text" id="projectBudget" name="projectBudget">
+
+            <button type="submit">Submit</button>
+        </form>
+    </div>
 
     <script>
-        let userRole = '';
+        let lastOpenSuggestion = null;
 
-        function selectRole(role) {
-            userRole = role;
-            document.getElementById('roleSelection').style.display = 'none';
-            document.getElementById('actionSelection').style.display = 'block';
-        }
+        function openProjectForm(role) {
+            const form = document.getElementById('projectForm');
+            const currentSuggestion = document.getElementById('searchInput').value;
 
-        function showLoginForm() {
-            document.get
-            function showLoginForm() {
-            document.getElementById('loginForm').style.display = 'block';
-            document.getElementById('signupForm').style.display = 'none';
-        }
-
-        function showSignupForm() {
-            document.getElementById('signupForm').style.display = 'block';
-            document.getElementById('loginForm').style.display = 'none';
-        }
-
-        function showSearchBar() {
-            document.getElementById('searchBar').style.display = 'flex';
-            document.getElementById('suggestionButtons').style.display = 'grid';
-        }
-
-        function login() {
-            const loginAadhar = document.getElementById("loginAadhar").value;
-            const loginPassword = document.getElementById("loginPassword").value;
-
-            const storedAadhar = localStorage.getItem(`${userRole}_aadhar`);
-            const storedPassword = localStorage.getItem(`${userRole}_password`);
-
-            if (loginAadhar === storedAadhar && loginPassword === storedPassword) {
-                showSearchBar();
-                document.getElementById('loginForm').style.display = 'none';
-                document.getElementById('signupForm').style.display = 'none';
-                document.getElementById('actionSelection').style.display = 'none';
-                document.getElementById('roleSelection').style.display = 'none';
+            if (lastOpenSuggestion === role && form.classList.contains('active')) {
+                // Close the form if it's already open for the same suggestion
+                form.classList.remove('active');
+                lastOpenSuggestion = null;
             } else {
-                alert("Invalid Aadhar Card or Password!");
+                // Open the form with the selected role
+                document.getElementById('searchInput').value = role; // Use the selected role
+                form.classList.add('active');
+                lastOpenSuggestion = role;
             }
         }
 
-        function signup() {
-            const name = document.getElementById("name").value;
-            const mobile = document.getElementById("mobile").value;
-            const aadhar = document.getElementById("aadhar").value;
-            const password = document.getElementById("password").value;
-
-            if (name && mobile && aadhar && password) {
-                localStorage.setItem(`${userRole}_aadhar`, aadhar);
-                localStorage.setItem(`${userRole}_password`, password);
-
-                alert("Signup successful! Please login.");
-                showLoginForm();
-            } else {
-                alert("Please fill out all fields!");
-            }
+        function toggleProfileDropdown() {
+            const dropdown = document.getElementById('profileDropdown');
+            dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
         }
+
+        // Close the form if clicking outside
+        document.addEventListener('click', function (event) {
+            const form = document.getElementById('projectForm');
+            const suggestionButtons = document.getElementById('suggestionButtons');
+            const profileDropdown = document.getElementById('profileDropdown');
+            if (!form.contains(event.target) && !suggestionButtons.contains(event.target) && !profileDropdown.contains(event.target)) {
+                form.classList.remove('active');
+                lastOpenSuggestion = null;
+            }
+        });
     </script>
 </body>
+
 </html>
